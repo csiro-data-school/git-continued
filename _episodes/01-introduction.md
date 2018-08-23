@@ -29,22 +29,22 @@ keypoints:
 >> ## Solution
 >> 
 >> ~~~
->> mkdir git-refresher
->> cd git-refresher
->> git init
->> echo "True Grit" > books.txt
->> git add books.txt
->> git commit -m "Initial commit - added first book title"
->> echo "The Princess Bride" >> books.txt
->> git add books.txt
->> git commit -m "added second book"
->> echo "The Mask of Dimitrios" >> books.txt
->> git add books.txt
->> git commit -m "added third book"
+>> $ mkdir git-refresher
+>> $ cd git-refresher
+>> $ git init
+>> $ echo "True Grit" > books.txt
+>> $ git add books.txt
+>> $ git commit -m "Initial commit - added first book title"
+>> $ echo "The Princess Bride" >> books.txt
+>> $ git add books.txt
+>> $ git commit -m "added second book"
+>> $ echo "The Mask of Dimitrios" >> books.txt
+>> $ git add books.txt
+>> $ git commit -m "added third book"
 >> 
 >> #To navigate back two commits
->> git checkout HEAD~2
->> cat books.txt
+>> $ git checkout HEAD~2
+>> $ cat books.txt
 >> ~~~
 >> {: .bash}
 > {: .solution}
@@ -75,12 +75,12 @@ keypoints:
 >> 
 >> Make sure you are not inside a git repository when you do `git clone`
 >> ~~~
->> git clone https://github.com/afdataschool/git-guacamole
->> cd git-recipes
->> git log
+>> $ git clone https://github.com/afdataschool/git-guacamole
+>> $ cd git-recipes
+>> $ git log
 >>
 >> # One possible solution:
->> git log --oneline | wc -l
+>> $ git log --oneline | wc -l
 >> ~~~
 >> {: .bash}
 > {: .solution}
