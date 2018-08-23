@@ -1,110 +1,131 @@
 ---
-layout: episode
-title: Undoing things
+title: "Undoing things"
 teaching: 10
 exercises: 10
 questions:
-  - How can I undo things?
+- "How can I undo things from git history?"
 objectives:
-  - Learn to undo changes safely
-  - See when undone changes are permanently deleted and when they can be retrieved
+- "Learn to undo changes safely"
+- "See when undone changes are permanently deleted and when they can be retrieved"
+keypoints:
+- "`git revert` is a safe method to undo changes by adding a **new commit**"
+- "`git amend` can add to the previous commit, but changes history"
+- "`git checkout [filename]` can permanently remove uncommitted changes"
 ---
 
 ## Undoing things
 
 - Commits that are part of any branch will not get lost.
 - Files which were added and later removed can always be recovered.
-- In Git we can modify, reorder, squash, and remove commits and also these actions can be undone.
+- In git we can modify, reorder, squash, and remove commits and these actions can also be undone.
 - Some commands can permanently delete **uncommitted** changes. In doubt always commit first.
-- Some commands **modify history**. This is OK for local commits but may not be OK for commits shared
-  with others.
+- Some commands **modify history**. This is OK for local commits but may not be OK for commits 
+shared with others. So if the commits have been pushed, **don't rewrite history**.
 
----
 
-### Reverting commits
+## Reverting commits
 
-- Imagine we made a few commits.
-- We realize that the latest commit `f960dd3` was a mistake and we wish to undo it:
+- Let's add an onion to the `ingredients.txt` file.
 
-```
+~~~
+$ echo "* 1 onion" >> ingredients.txt
+$ git add ingredients.txt
+$ git commit -m "Add an onion to the recipe"
+~~~
+{: .bash}
+
+It turns out the onion **did not** improve the guacamole. Let's undo it. 
+
+First, let's have a look at the history.
+
+~~~
 $ git log --oneline
 
-f960dd3 (HEAD -> master) not sure this is a good idea
-40fbb90 draft a readme
-dd4472c we should not forget to enjoy
-2bb9bb4 add half an onion
-2d79e7e adding ingredients and instructions
-```
+445309b Add an onion to the recipe
+53f42b7 Added salt to ingredients
+1fea6fd Added instructions file
+1805665 added txt file extension to ingredients
+db9b3a9 Initial commit - added ingredients
+~~~
+{: .bash}
 
 A safe way to undo the commit is to revert the commit with `git revert`:
 
-```
-$ git revert f960dd3
-```
+~~~
+$ git revert 445309b
+# or
+$ git revert HEAD
+~~~
+{: .bash}
 
 This creates a **new commit** that does the opposite of the reverted commit.
 The old commit remains in the history:
 
-```
+~~~
 $ git log --oneline
 
-d62ad3e (HEAD -> master) Revert "not sure this is a good idea"
-f960dd3 not sure this is a good idea
-40fbb90 draft a readme
-dd4472c we should not forget to enjoy
-2bb9bb4 add half an onion
-2d79e7e adding ingredients and instructions
-```
+f13051c Revert "Add an onion to the recipe"
+445309b Add an onion to the recipe
+53f42b7 Added salt to ingredients
+1fea6fd Added instructions file
+1805665 added txt file extension to ingredients
+db9b3a9 Initial commit - added ingredients
+~~~
+{: .bash}
 
-### Exercise: Revert a commit
+> ## Challenge 3
+>
+> - Create a commit.
+> - Revert the commit with `git revert`.
+> - Inspect the history with `git log --oneline`.
+> - Now try `git show` on both the reverted and the newly created commit.
+{: .challenge}
 
-- Create a commit.
-- Revert the commit with `git revert`.
-- Inspect the history with `git log --oneline`.
-- Now try `git show` on both the reverted and the newly created commit.
-
----
-
-### Adding to the previous commit
+## Adding to the previous commit
 
 Sometimes we commit but realize we forgot something.
 We can amend to the last commit:
 
-```shell
+~~~
 $ git commit --amend
-```
+~~~
+{: .bash}
 
 This can also be used to modify the last commit message.
 
-Note that this **will change the commit hash**. This command **modifies the history**.
-This means that we never use this command on commits that we have shared with others.
+> ## IMPORTANT
+> Note that this **will change the commit hash**. This command **modifies the history**.
+> This means that we **NEVER** use this command on commits that we have shared with others.
+{: .callout}
 
----
 
-### Undo unstaged/uncommitted changes
+## Undo unstaged/uncommitted changes
 
-This is a command that **permanently deletes** changes
-that were unstaged/uncommitted!
+The following approach **permanently deletes** changes that were unstaged/uncommitted!
 
-### Exercise: Modify without staging
 
-- Make a silly change to a project, do not stage it or commit it.
-- Inspect the change with `git status` and `git diff`.
-- Now undo the change with `git checkout <file>`.
-- Verify that the change is gone with `git status` and `git diff`.
+> ## Challenge: Modify without staging
+>
+> - Make a silly change to a project, do not stage it or commit it.
+> - Inspect the change with `git status` and `git diff`.
+> - Now undo the change with `git checkout <file>`.
+> - Verify that the change is gone with `git status` and `git diff`.
+{: .challenge}
 
-### Exercise: Modify after staging
 
-- Make a reasonable change to a project, stage it.
-- Make a silly change after you have staged the reasonable change.
-- Inspect the situation with `git status`, `git diff`, `git diff --staged`, and `git diff HEAD`.
-- Now undo the silly change with `git checkout <file>`.
-- Inspect the new situation with `git status`, `git diff`, `git diff --staged`, and `git diff HEAD`.
+> ## Challenge: Modify after staging
+>
+> - Make a reasonable change to a project, stage it.
+> - Make a silly change after you have staged the reasonable change.
+> - Inspect the situation with `git status`, `git diff`, `git diff --staged`, and `git diff HEAD`.
+> - Now undo the silly change with `git checkout <file>`.
+> - Inspect the new situation with `git status`, `git diff`, `git diff --staged`, and 
+> `git diff HEAD`.
+{: .challenge}
 
----
-
-### Questions
-
-- What happens if you accidentally remove a tracked file with `git rm`, is it gone forever?
-- What situations would justify to modify the Git history and possibly remove commits?
-- Is it OK to modify commits that nobody has seen yet?
+> ## Discussion
+> 
+> - What happens if you accidentally remove a tracked file with `git rm`, is it gone forever?
+> - What situations would justify to modify the Git history and possibly remove commits?
+> - Is it OK to modify commits that nobody has seen yet?
+{: .discussion}

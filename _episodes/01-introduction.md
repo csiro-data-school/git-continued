@@ -75,7 +75,7 @@ keypoints:
 >> 
 >> Make sure you are not inside a git repository when you do `git clone`
 >> ~~~
->> git clone https://github.com/afdataschool/git-recipes
+>> git clone https://github.com/afdataschool/git-guacamole
 >> cd git-recipes
 >> git log
 >>
