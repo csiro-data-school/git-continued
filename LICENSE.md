@@ -3,10 +3,13 @@ layout: page
 title: "Licenses"
 root: .
 ---
+The structure of this lesson uses the Carpentries [swc-styles repository](https://github.com/carpentries/styles/).
+
+The material in this lesson is adapted from the Code Refineries [git-intro](https://github.com/coderefinery/git-intro) and [git-branch-design](https://github.com/coderefinery/git-branch-design) material.
+
 ## Instructional Material
 
-All Software Carpentry and Data Carpentry instructional material is
-made available under the [Creative Commons Attribution
+This instructional material is made available under the [Creative Commons Attribution
 license][cc-by-human]. The following is a human-readable summary of
 (and not a substitute for) the [full legal text of the CC BY 4.0
 license][cc-by-legal].
@@ -24,9 +27,8 @@ license terms.
 Under the following terms:
 
 * **Attribution**---You must give appropriate credit (mentioning that
-  your work is derived from work that is Copyright © Software
-  Carpentry and, where practical, linking to
-  http://software-carpentry.org/), provide a [link to the
+  your work is derived from work that is Copyright (c) CodeRefinery 
+  and, where practical, linking to http://coderefinery.org), provide a [link to the
   license][cc-by-human], and indicate if changes were made. You may do
   so in any reasonable manner, but not in any way that suggests the
   licensor endorses you or your use.
