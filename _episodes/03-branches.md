@@ -1,41 +1,40 @@
 ---
-layout: episode
-title: Branching and merging
+title: "Branching and merging"
 teaching: 20
 exercises: 15
 questions:
-  - How can I or my team work on multiple features in parallel?
-  - How to combine the changes of parallel tracks of work?
-  - How can I permanently reference a point in history, like a software
-    version?
+- "How can I or my team work on multiple features in parallel?"
+- "How to combine the changes of parallel tracks of work?"
+- "How can I permanently reference a point in history, like a software version?"
 objectives:
-  - Be able to create and merge branches.
-  - Know the difference between a branch and a tag.
+- "Be able to create and merge branches."
+- "Know the difference between a branch and a tag."
 keypoints:
-  - A branch is a division unit of work, to be merged with other units of work.
-  - A tag is a pointer to a moment in the history of a project.
+- "A branch is a division unit of work, to be merged with other units of work."
+- "A tag is a pointer to a moment in the history of a project."
 ---
 
 ## Motivation for branches
 
-In the previous section we tracked a guacamole recipe with Git.
+In the previous section we tracked a guacamole recipe with git.
 
 Up until now our repository had only one branch with one commit coming
 after the other:
 
-![Linear]({{ site.baseurl }}/img/gitink/git-branch-1.svg "Linear git
-repository"){:class="img-responsive"}
+![Linear]({{ page.root }}/fig/git-branch-1.svg "Linear git repository")
 
 - Commits are depicted as little boxes with abbreviated hashes.
 - The sequence of commits forms a **branch**.
 - Here the branch is called "master".
-- "HEAD" is the current position (remember the recording head of tape recorders?).
+- "HEAD" is the current position. Notice that HEAD is pointing to the "master" label, not the 
+actual commit.
 
-Software development is often not linear:
+Software development, and analytical code, is often non-linear:
 
 - We typically need at least one version of the code to "work" (to compile, to give expected results, ...).
-- At the same time we work on new features, often several features concurrently.
-  Often they are unfinished.
+- At the same time we work on new features, or alternative approaches, often several features concurrently.
+- Often they are unfinished.
+- We need different people to be able to work on different approaches in parallel.
 - We need to be able to separate different lines of work really well.
 
 The strength of version control is that it permits the researcher to **isolate
@@ -43,8 +42,7 @@ different tracks of work**. Researchers can work on different things and merge
 the changes they made to the source code files afterwards to create a composite
 version that contains both the changes:
 
-![Git collaborative]({{ site.baseurl }}/img/gitink/git-collaborative.svg
-"description"){:class="img-responsive"}
+![Git collaborative]({{ page.root }}/fig/git-collaborative.svg)
 
 - We see branching points and merging points.
 - Main line development is often called `master`.
@@ -65,60 +63,132 @@ Before we exercise branching, a quick recap of what we got so far.
 We have three commits (we use the first two characters of the commits) and only
 one development line (branch) and this branch is called "master":
 
-![]({{ site.baseurl }}/img/gitink/git-branch-1.svg)
+![]({{ page.root }}/fig/git-branch-1.svg)
 
-We have defined the `git graph` alias earlier using
-(if `git graph` doesn't work for you, run this line to define it):
 
-```shell
-$ git config --global alias.graph "log --all --graph --decorate --oneline"
-```
+~~~
+$ git log --oneline --decorate
 
-Let us inspect the project history using the `git graph` alias:
-
-```shell
-$ git graph
-
-* dd4472c (HEAD -> master) we should not forget to enjoy
-* 2bb9bb4 add half an onion
-* 2d79e7e adding ingredients and instructions
-```
+f13051c (HEAD -> master) Revert "Add an onion to the recipe"
+445309b Add an onion to the recipe
+53f42b7 (origin/master, origin/HEAD) Added salt to ingredients
+1fea6fd Added instructions file
+1805665 added txt file extension to ingredients
+db9b3a9 Initial commit - added ingredients
+~~~
+{: .bash}
 
 - Commits are states characterized by a 40-character hash (checksum).
-- `git graph` print abbreviations of these checksums.
-- Branches are pointers that point to a commit.
-- Branch `master` points to commit `dd4472c8093b7bbcdaa15e3066da6ca77fcabadd`.
+- `git log --oneline` prints abbreviations of these checksums.
+- Branches are labels that point to a commit (pointers). In this case "master".
+- Branch `master` points to commit `f13051c`.
 - `HEAD` is another pointer, it points to where we are right now (currently `master`) 
 
-### On which branch are we?
 
-To see where we are (where HEAD points to) use `git branch`:
+> ## Challenge
+>
+> Go to [http://git-school.github.io/visualizing-git/](http://git-school.github.io/visualizing-git/) and create several commits.
+> Note the way the master and head pointers move with each commit.
+> - What happens when you enter a 'detached HEAD state'?
+>
+>> ## Solution
+>>
+>> You can enter a detached HEAD state by checking out a previous commit
+>> `git checkout HEAD~1`
+>> The HEAD pointer no longer points to a branch pointer, but directly to a commit.
+>> This is what a 'detached HEAD' means - HEAD is detached from a branch.
+> {: .solution}
+{: .challenge}
 
-```shell
+
+### Which branch are we on?
+
+To see where we are (where `HEAD` points to) use `git branch`:
+
+~~~
 $ git branch
 
 * master
-```
+~~~
+{: .shell}
 
 - This command shows where we are, it does not create a branch.
-- There is only `master` and we are on `master` (star represents the `HEAD`).
+- There is only one brach, `master`, and we are on `master` (`*` represents the `HEAD`).
 
-In the following we will learn how to create branches,
-how to switch between them, how to merge branches,
-and how to remove them afterwards.
+In the following we will learn how to create branches, how to switch between them, 
+how to merge branches, and how to remove them afterwards.
 
----
 
 ## Creating and working with branches
 
-Let's create a branch called `experiment` where we add cilantro to `ingredients.txt`.
+In the [vizualising git environment](http://git-school.github.io/visualizing-git/#free), let's create a branch called `experiment`.
 
-```shell
-$ git branch experiment    # create branch called "experiment" pointing to the present commit
-$ git checkout experiment  # switch to branch "experiment"
-$ git branch               # list all local branches and show on which branch we are
-```
+~~~
+git branch experiment
+~~~
+{: .bash}
 
+Notice that there is a new pointer (at the same commit) with the `experiment` label.
+
+We can move `HEAD` to that pointer by using checkout:
+
+~~~
+git checkout experiment
+~~~
+{: .bash}
+
+Notice that `HEAD` is now pointing to `experiment` instead of `master`.
+
+Let's make a commit on `experiment`.
+
+~~~
+git commit -m "new commit on experiment branch"
+~~~
+{: .bash}
+
+The two branches, `master` and `experiment` have started to diverge.
+
+> ## Challenge
+> Make some commits on the master branch, and notice the way the graph is growing.
+>
+>> ## Solution
+>>
+>> ~~~
+>> git checkout master
+>> git commit -m "new commit on master"
+>> ~~~
+>> {: .bash}
+> {: .solution}
+{: .challenge}
+
+> ## Challenge
+> Back in our `git-guacamole` repository, create and switch to a branch called `experiment`
+> pointing to the present commit. 
+> Add a new ingredient to the ingredients list, and commit the change.
+> Use `git branch` and `git log` to view the branches and commits.
+>
+>> ## Solution
+>> ~~~
+>> git branch experiment
+>> git checkout experiment
+>> echo "* 1 clove crushed garlic" >> ingredients.txt
+>> git add ingredients.txt
+>> git commit -m "I wonder if garlic will work"
+>> git branch
+>> git log --oneline --decorate
+>> ~~~
+>> {: .bash}
+> {: .solution}
+{: .challenge}
+
+
+> ## Extra options to `git log`
+> You can get a graph view from git log by adding `--graph`. 
+>
+> Try:
+>
+> `git log --graph --oneline --decorate`
+{: .callout}
 - Verify that you are on the `experiment` branch (note that `git graph` also
   makes it clear what branch you are on: `HEAD -> branchname`):
 
@@ -216,7 +286,7 @@ $ git graph
 
 Here is a graphical representation of what we have created:
 
-![]({{ site.baseurl }}/img/gitink/git-branch-2.svg)
+![]({{ page.root }}/fig/git-branch-2.svg)
 
 - Now switch to `master`.
 - Add and commit the following `README.md` to `master`:
@@ -243,7 +313,7 @@ $ git graph
 * 2d79e7e adding ingredients and instructions
 ```
 
-![]({{ site.baseurl }}/img/gitink/git-branch-3.svg)
+![]({{ page.root }}/fig/git-branch-3.svg)
 
 And for comparison this is how it looks [on GitHub](https://github.com/bast/recipe/network).
 
@@ -280,7 +350,7 @@ Then we merge `experiment` into `master`:
 $ git merge experiment
 ```
 
-![]({{ site.baseurl }}/img/gitink/git-merge-1.svg)
+![]({{ page.root }}/fig/git-merge-1.svg)
 
 We can verify the result in the terminal:
 
@@ -322,7 +392,7 @@ $ git branch  # make sure you are on master
 $ git merge less-salt
 ```
 
-![]({{ site.baseurl }}/img/gitink/git-merge-2.svg)
+![]({{ page.root }}/fig/git-merge-2.svg)
 
 We can verify the result in the terminal:
 
@@ -386,7 +456,7 @@ Deleted branch less-salt (was bf59be6).
 
 This is the result:
 
-![]({{ site.baseurl }}/img/gitink/git-deleted-branches.svg)
+![]({{ page.root }}/fig/git-deleted-branches.svg)
 
 Compare in the terminal:
 
@@ -421,7 +491,7 @@ may have a hard time finding them as there is no branch pointing to them.
 - Create a new branch from `master` and switch to it.
 - Create a couple of commits on the new branch (for instance edit `README.md`):
 
-![]({{ site.baseurl }}/img/gitink/git-pre-ff.svg)
+![]({{ page.root }}/fig/git-pre-ff.svg)
 
 - Now switch to `master`.
 - Merge the new branch to `master`.
