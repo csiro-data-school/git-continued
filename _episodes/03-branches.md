@@ -69,8 +69,8 @@ one development line (branch) and this branch is called "master":
 ~~~
 $ git log --oneline --decorate
 
-f13051c (HEAD -> master) Revert "Add an onion to the recipe"
-445309b Add an onion to the recipe
+40a87b4 (HEAD -> master) Revert "Add an onion to the recipe"
+295b424 Add an onion to the recipe
 53f42b7 (origin/master, origin/HEAD) Added salt to ingredients
 1fea6fd Added instructions file
 1805665 added txt file extension to ingredients
@@ -164,18 +164,32 @@ The two branches, `master` and `experiment` have started to diverge.
 > ## Challenge
 > Back in our `git-guacamole` repository, create and switch to a branch called `experiment`
 > pointing to the present commit. 
-> Add a new ingredient to the ingredients list, and commit the change.
+> Add garlic as a new ingredient **at the top** of the ingredients list, and commit the change.
+> Now make a new commit where you reduce the amount of garlic.
 > Use `git branch` and `git log` to view the branches and commits.
 >
 >> ## Solution
 >> ~~~
->> git branch experiment
->> git checkout experiment
->> echo "* 1 clove crushed garlic" >> ingredients.txt
->> git add ingredients.txt
->> git commit -m "I wonder if garlic will work"
->> git branch
->> git log --oneline --decorate
+>> $ git branch experiment
+>> $ git checkout experiment
+>> $ echo "* 1 clove crushed garlic" >> ingredients.txt
+>> $ git add ingredients.txt
+>> $ git commit -m "I wonder if garlic will work"
+>> $ vim ingredients.txt
+>> $ git add ingredients.txt
+>> $ git commit -m "A bit less garlic"
+>> $ git branch
+>> * experiment
+>> master
+>> $ git log --oneline --decorate
+>> 47d0a9d (HEAD -> experiment) A bit less garlic
+>> e1e6f7d I wonder if garlic will work
+>> 40a87b4 (master) Revert "Add an onion to the recipe"
+>> 295b424 Add an onion to the recipe
+>> 53f42b7 (origin/master, origin/HEAD) Added salt to ingredients
+>> 1fea6fd Added instructions file
+>> 1805665 added txt file extension to ingredients
+>> db9b3a9 Initial commit - added ingredients
 >> ~~~
 >> {: .bash}
 > {: .solution}
@@ -187,102 +201,45 @@ The two branches, `master` and `experiment` have started to diverge.
 >
 > Try:
 >
-> `git log --graph --oneline --decorate`
+> `git log --all --graph --oneline --decorate`
 {: .callout}
-- Verify that you are on the `experiment` branch (note that `git graph` also
-  makes it clear what branch you are on: `HEAD -> branchname`):
 
-```shell
-$ git branch
+> ## Challenge
+> 
+> - Change to the branch `master`.
+> - Create another branch called `less-salt` where you reduce the amount of salt.
+> - Commit your changes to the `less-salt` branch.
+> - View the branches and commits.
+>
+>> ## Solution
+>>
+>> ~~~
+>> git checkout master
+>> git branch less-salt
+>> git checkout less-salt
+>> vim ingredients
+>> git add ingredients.txt
+>> git commit -m "reduce the salt"
+>> git branch
+>>   experiment
+>> * less-salt
+>>   master
+>> git log --all --graph --oneline --decorate
+>> * 3db05f9 (HEAD -> less-salt) reduce the salt
+>> | * 47d0a9d (experiment) A bit less garlic
+>> | * e1e6f7d I wonder if garlic will work
+>> |/
+>> * 40a87b4 (master) Revert "Add an onion to the recipe"
+>> * 295b424 Add an onion to the recipe
+>> * 53f42b7 (origin/master, origin/HEAD) Added salt to ingredients
+>> * 1fea6fd Added instructions file
+>> * 1805665 added txt file extension to ingredients
+>> * db9b3a9 Initial commit - added ingredients
+>> ~~~
+>> {: .bash}
+> {: .solution}
+{: .challenge}
 
-* experiment
-  master
-```
-
-- Then add 2 tbsp cilantro **on top** of the `ingredients.txt`:
-
-```shell
-* 2 tbsp cilantro
-* 2 avocados
-* 1 lime
-* 2 tsp salt
-* 1/2 onion
-```
-
-- Stage this and commit it with the message "let us try with some cilantro".
-- Then reduce the amount of cilantro to 1 tbsp, stage and commit again with "maybe little bit less cilantro".
-
-We have created **two new commits**:
-
-```shell
-$ git graph
-
-* 6feb49d (HEAD -> experiment) maybe little bit less cilantro
-* 7cf6d8c let us try with some cilantro
-* dd4472c (master) we should not forget to enjoy
-* 2bb9bb4 add half an onion
-* 2d79e7e adding ingredients and instructions
-```
-
-- The branch `experiment` is two commits ahead of `master`.
-- We commit our changes to this branch.
-
-
-## Interlude: Different meanings of "checkout"
-
-Depending on the context `git checkout` can do very different actions:
-
-1) Switch to a branch:
-
-```
-$ git checkout <branchname>
-```
-
-2) Bring the working tree to a specific state (commit):
-
-```
-$ git checkout <hash>
-```
-
-3) Set a file/path to a specific state (**throws away all unstaged/uncommitted changes**):
-
-```
-$ git checkout <path/file>
-```
-
-This is unfortunate from the user's point of view but the way Git is implemented it makes sense.
-Picture `git checkout` as an operation that brings the working tree to a specific state.
-The state can be a commit or a branch (pointing to a commit).
-
-
-## Exercise: branches
-
-- Change to the branch `master`.
-- Create another branch called `less-salt`
-  where you reduce the amount of salt.
-- Commit your changes to the `less-salt` branch.
-
-Use the same commands as we used above.
-
-We now have three branches (in this case `HEAD` points to `experiment`):
-
-```shell
-$ git branch
-
-* experiment
-  less-salt
-  master
-
-$ git graph
-
-* bf59be6 (HEAD -> less-salt) reduce amount of salt
-| * 6feb49d (experiment) maybe little bit less cilantro
-| * 7cf6d8c let us try with some cilantro
-|/
-* dd4472c (master) we should not forget to enjoy
-* 2bb9bb4 add half an onion
-* 2d79e7e adding ingredients and instructions
-```
 
 Here is a graphical representation of what we have created:
 
@@ -291,86 +248,95 @@ Here is a graphical representation of what we have created:
 - Now switch to `master`.
 - Add and commit the following `README.md` to `master`:
 
-```markdown
+~~~
 # Guacamole recipe
 
-Used in teaching Git.
-```
+Used in teaching git.
+~~~
+{: .markdown}
 
 Now you should have this situation:
 
-```shell
-$ git graph
+~~~
+$ git log --all --graph --oneline --decorate
 
-* 40fbb90 (HEAD -> master) draft a readme
-| * bf59be6 (less-salt) reduce amount of salt
+* 29e2be2 (HEAD -> master) added readme
+| * 3db05f9 (less-salt) reduce the salt
 |/
-| * 6feb49d (experiment) maybe little bit less cilantro
-| * 7cf6d8c let us try with some cilantro
+| * 47d0a9d (experiment) A bit less garlic
+| * e1e6f7d I wonder if garlic will work
 |/
-* dd4472c we should not forget to enjoy
-* 2bb9bb4 add half an onion
-* 2d79e7e adding ingredients and instructions
-```
+* 40a87b4 Revert "Add an onion to the recipe"
+* 295b424 Add an onion to the recipe
+* 53f42b7 (origin/master, origin/HEAD) Added salt to ingredients
+* 1fea6fd Added instructions file
+* 1805665 added txt file extension to ingredients
+* db9b3a9 Initial commit - added ingredients
+~~~
+{: .bash}
 
 ![]({{ page.root }}/fig/git-branch-3.svg)
 
 And for comparison this is how it looks [on GitHub](https://github.com/bast/recipe/network).
 
----
 
 ## Merging branches
 
-**If you got stuck in the above exercises**:
+**If you got stuck in the branching exercises**:
 
 - **Skip this unless you got stuck**.
-- Step out of the current directory: `$ cd ..`
-- `$ git clone https://github.com/bast/recipe.git recipe-branching`
-- `$ cd recipe-branching`
-- `$ git graph`
-- Or call a helper to un-stuck it for you.
+~~~
+cd ..
+git clone https://github.com/afdataschool/git-guacomole-branched
+cd recipe-branching
+git log --all --graph --oneline --decorate
+~~~
+{: .bash}
 
-
-It turned out that our experiment with cilantro was a good idea.
+It turned out that the experiment with garlic was a good idea.
 Our goal now is to merge `experiment` into `master`.
 
 First we make sure we are on the branch we wish to merge **into**:
 
-```shell
+~~~~
 $ git branch
 
   experiment
   less-salt
 * master
-```
+~~~
+{: .bash}
 
 Then we merge `experiment` into `master`:
 
-```shell
-$ git merge experiment
-```
+~~~
+git merge experiment
+~~~
 
 ![]({{ page.root }}/fig/git-merge-1.svg)
 
 We can verify the result in the terminal:
 
-```shell
-$ git graph
+~~~
+git log --all --graph --oneline --decorate
 
-*   c43b24c (HEAD -> master) Merge branch 'experiment'
+*   393dfaf (HEAD -> master) Merge branch 'experiment'
 |\
-| * 6feb49d (experiment) maybe little bit less cilantro
-| * 7cf6d8c let us try with some cilantro
-* | 40fbb90 draft a readme
+| * 47d0a9d (experiment) A bit less garlic
+| * e1e6f7d I wonder if garlic will work
+* | 29e2be2 (origin/master) added readme
 |/
-| * bf59be6 (less-salt) reduce amount of salt
+| * 3db05f9 (less-salt) reduce the salt
 |/
-* dd4472c we should not forget to enjoy
-* 2bb9bb4 add half an onion
-* 2d79e7e adding ingredients and instructions
+* 40a87b4 Revert "Add an onion to the recipe"
+* 295b424 Add an onion to the recipe
+* 53f42b7 Added salt to ingredients
+* 1fea6fd Added instructions file
+* 1805665 added txt file extension to ingredients
+* db9b3a9 Initial commit - added ingredients
 ```
 
-What happens internally when you merge two branches is that Git creates a new
+What happens internally when you merge two branches is that git creates a new
 commit, attempts to incorporate changes from both branches and records the
 state of all files in the new commit. While a regular commit has one parent, a
 merge commit has two (or more) parents.
@@ -385,106 +351,121 @@ $ git branch --merged
 ```
 
 We are also happy with the work on the `less-salt` branch. Let us merge that
-one, too, into `master`:
+one, into `master` as well:
 
-```shell
+~~~
 $ git branch  # make sure you are on master
 $ git merge less-salt
-```
+~~~
+{: .bash}
 
 ![]({{ page.root }}/fig/git-merge-2.svg)
 
 We can verify the result in the terminal:
 
 ```shell
-$ git graph
+$ git log --all --graph --oneline --decorate
 
-*   4f00317 (HEAD -> master) Merge branch 'less-salt'
+*   95a5f4c (HEAD -> master) Merge branch 'less-salt'
 |\
-| * bf59be6 (less-salt) reduce amount of salt
-* |   c43b24c Merge branch 'experiment'
+| * 3db05f9 (less-salt) reduce the salt
+* |   393dfaf Merge branch 'experiment'
 |\ \
-| * | 6feb49d (experiment) maybe little bit less cilantro
-| * | 7cf6d8c let us try with some cilantro
+| * | 47d0a9d (experiment) A bit less garlic
+| * | e1e6f7d I wonder if garlic will work
 | |/
-* | 40fbb90 draft a readme
+* | 29e2be2 (origin/master) added readme
 |/
-* dd4472c we should not forget to enjoy
-* 2bb9bb4 add half an onion
-* 2d79e7e adding ingredients and instructions
+* 40a87b4 Revert "Add an onion to the recipe"
+* 295b424 Add an onion to the recipe
+* 53f42b7 Added salt to ingredients
+* 1fea6fd Added instructions file
+* 1805665 added txt file extension to ingredients
+* db9b3a9 Initial commit - added ingredients
 ```
 
-Observe how Git nicely merged the changed amount of salt and the new ingredient **in the same file
+Observe how git nicely merged the changed amount of salt and the new ingredient **in the same file
 without us merging it manually**:
 
-```shell
+~~~
 $ cat ingredients.txt
 
-* 1 tbsp cilantro
+* 1/2 clove garlic
 * 2 avocados
 * 1 lime
 * 1 tsp salt
-* 1/2 onion
-```
+~~~
+{: .bash}
 
-If the same file is changed in both branches, Git attempts to incorporate both
+If the same file is changed in both branches, git attempts to incorporate both
 changes into the merged file. If the changes overlap then the user has to
 manually *settle merge conflicts* (we will do that later).
 
----
 
 ## Deleting branches safely
 
 Both feature branches are merged:
 
-```shell
+~~~
 $ git branch --merged
 
   experiment
   less-salt
 * master
-```
+~~~
+{: .bash}
 
 This means we can delete the branches:
 
-```shell
+~~~
 $ git branch -d experiment less-salt
 
-Deleted branch experiment (was 6feb49d).
-Deleted branch less-salt (was bf59be6).
-```
+Deleted branch experiment (was 47d0a9d).
+Deleted branch less-salt (was 3db05f9).
+~~~
+{: .bash}
 
-This is the result:
+> ## Discussion
+> Think about what you expect the graph to look like now. What has been removed?
+>
+>> ## Solution
+>> This is the result:
+>>
+>>![]({{ page.root }}/fig/git-deleted-branches.svg)
 
-![]({{ page.root }}/fig/git-deleted-branches.svg)
+Notice all of the history is still there, just the lables (pointers) have been removed.
+> {: .solution}
+{: .discussion}
 
 Compare in the terminal:
 
-```shell
-$ git graph
+~~~
+$ git log --all --graph --oneline --decorate
 
-*   4f00317 (HEAD -> master) Merge branch 'less-salt'
+*   95a5f4c (HEAD -> master) Merge branch 'less-salt'
 |\
-| * bf59be6 reduce amount of salt
-* |   c43b24c Merge branch 'experiment'
+| * 3db05f9 reduce the salt
+* |   393dfaf Merge branch 'experiment'
 |\ \
-| * | 6feb49d maybe little bit less cilantro
-| * | 7cf6d8c let us try with some cilantro
+| * | 47d0a9d A bit less garlic
+| * | e1e6f7d I wonder if garlic will work
 | |/
-* | 40fbb90 draft a readme
+* | 29e2be2 (origin/master) added readme
 |/
-* dd4472c we should not forget to enjoy
-* 2bb9bb4 add half an onion
-* 2d79e7e adding ingredients and instructions
-```
+* 40a87b4 Revert "Add an onion to the recipe"
+* 295b424 Add an onion to the recipe
+* 53f42b7 Added salt to ingredients
+* 1fea6fd Added instructions file
+* 1805665 added txt file extension to ingredients
+* db9b3a9 Initial commit - added ingredients
+~~~
+{: .bash}
 
-As you see only the pointers disappeared, not the commits.
-
-Git will not let you delete a branch which has not been reintegrated unless you
+git will not let you delete a branch which has not been reintegrated unless you
 insist using `git branch -D`. Even then your commits will not be lost but you
-may have a hard time finding them as there is no branch pointing to them.
+may have a hard time finding them as there is no branch label pointing to them.
 
----
+
 
 ### Exercise: encounter a fast-forward merge
 

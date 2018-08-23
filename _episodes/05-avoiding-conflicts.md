@@ -1,12 +1,11 @@
 ---
-layout: episode
 title: "Avoiding conflicts"
 teaching: 10
 exercises: 0
 questions:
-  - How should we organize branches to avoid conflicts?
+- "How should we organize branches to avoid conflicts?"
 objectives:
-  - Avoid conflicts, avoid double work, avoid losing patches.
+- "Avoid conflicts, avoid double work, avoid losing patches."
 ---
 
 ## Avoiding conflicts
@@ -39,7 +38,7 @@ Common situation:
 - You decide to fix this defect right on your new branch "while at it".
 - This is probably a **bad idea** - why?
 
-![]({{ site.baseurl }}/img/git-fix-1.svg)
+![]({{ page.root }}/fig/git-fix-1.svg)
 
 - Reasoning
     - If you fix it on your branch other people might not see it.
@@ -55,7 +54,7 @@ Common situation:
     - Fix it on `master`, so other developers can see it.
     - Than merge it to your development/topic branch.
 
-![]({{ site.baseurl }}/img/git-fix-2.svg)
+![]({{ page.root }}/fig/git-fix-2.svg)
 
 - Developing separate features on separate branches minimizes conflicts.
 - It makes branches shorter-lived.
@@ -70,7 +69,7 @@ Common situation:
 
 Solution: `git cherry-pick` the commit to the "right" branch:
 
-![]({{ site.baseurl }}/img/git-fix-3.svg)
+![]({{ page.root }}/fig/git-fix-3.svg)
 
 ---
 
@@ -82,7 +81,7 @@ So you wish you had committed them to an experimental branch instead.
 
 What now?
 
-![]({{ site.baseurl }}/img/git-split-branch-1.svg)
+![]({{ page.root }}/fig/git-split-branch-1.svg)
 
 You want to move last three commits to a separate branch.
 
@@ -90,7 +89,7 @@ First make sure that your working directory and index are empty.
 
 Then create a new branch (e.g. `feature`):
 
-![]({{ site.baseurl }}/img/git-split-branch-2.svg)
+![]({{ page.root }}/fig/git-split-branch-2.svg)
 
 Now reset `master` back three commits:
 
@@ -100,7 +99,7 @@ $ git branch feature   # create feature branch but stay on master
 $ git reset --hard c2  # on master
 ```
 
-![]({{ site.baseurl }}/img/git-split-branch-3.svg)
+![]({{ page.root }}/fig/git-split-branch-3.svg)
 
 Another job well done.
 **However, this should not be done if the commits have already been shared with others.**

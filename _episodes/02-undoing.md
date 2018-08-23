@@ -41,7 +41,7 @@ First, let's have a look at the history.
 ~~~
 $ git log --oneline
 
-445309b Add an onion to the recipe
+295b424 Add an onion to the recipe
 53f42b7 Added salt to ingredients
 1fea6fd Added instructions file
 1805665 added txt file extension to ingredients
@@ -64,8 +64,8 @@ The old commit remains in the history:
 ~~~
 $ git log --oneline
 
-f13051c Revert "Add an onion to the recipe"
-445309b Add an onion to the recipe
+40a87b4 Revert "Add an onion to the recipe"
+295b424 Add an onion to the recipe
 53f42b7 Added salt to ingredients
 1fea6fd Added instructions file
 1805665 added txt file extension to ingredients

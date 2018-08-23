@@ -1,12 +1,11 @@
 ---
-layout: episode
 title: "Branch hygiene"
 teaching: 10
 exercises: 0
 questions:
-  - Why is the Git log history important?
+- "Why is the Git log history important?"
 objectives:
-  - Learn how to name branches.
+- "Learn how to name branches."
 ---
 
 ## Branch naming
@@ -14,18 +13,18 @@ objectives:
 - Name your local branches such that you will recognize them 3 months later.
 - "test2", "foo", "debug", "mybranch" are not good branch names.
 - Give descriptive names to remote branches.
-- For topic branches we recommend to name them "author/topic" (example `joe/new-integrator`).
+- For topic branches we recommend to name them "author/topic" (example `sarah/new-integrator`).
 - Then everybody knows who is to be contacted about this branch (e.g. stale branches).
 - Also you can easily find "your" branches:
 
-```shell
-$ git branch -r | grep joe
-```
+~~~
+$ git branch -r | grep sarah
+~~~
+{: .bash}
 
 - Name bugfix branches after the issue/ticket (e.g. `issue-137`).
 - For release branches we recommend e.g. `release/2.x` or `stable-2.x`.
 
----
 
 ## Always have only one main development line
 
@@ -37,21 +36,18 @@ $ git branch -r | grep joe
   (three main development lines) or somebody will spend a heroic effort to keep
   them synchronized.
 
----
 
 ## Every commit on the main development line should build/compile
 
 - Sometimes you want to find a commit in the past that broke some functionality.
-- When using `git bisect` it is very helpful if all commits build/compile.
 - There is no reason to commit broken or unfinished code to the main development line: for this we have branches.
 
----
 
 ## Branch hygiene
 
 Often we have this situation (newest commit is on top):
 
-```shell
+~~~
 $ git log --oneline
 
 6e129cf documentation for feature C
@@ -59,7 +55,8 @@ $ git log --oneline
 bc11c47 save work on feature C
 aa25177 feature B
 6b58ba4 feature A
-```
+~~~
+{: .bash}
 
 But we would prefer to have this history:
 
