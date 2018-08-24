@@ -64,7 +64,7 @@ keypoints:
 - To send local changes to the remote, use `git push`
 
 > ## Challenge 2 
-> Clone a local copy of the [git-guacamole repo](https://github.com/afdataschool/git-gaucamole). 
+> Clone a local copy of the [git-guacamole repo](https://github.com/afdataschool/git-guacamole). 
 > Make sure you think about where you should make your local copy.
 >
 > - How many commits have been made in the repository?
