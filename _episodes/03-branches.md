@@ -164,9 +164,9 @@ The two branches, `master` and `experiment` have started to diverge.
 > ## Challenge
 > Back in our `git-guacamole` repository, create and switch to a branch called `experiment`
 > pointing to the present commit. 
-> Add garlic as a new ingredient **at the top** of the ingredients list, and commit the change.
-> Now make a new commit where you reduce the amount of garlic.
-> Use `git branch` and `git log` to view the branches and commits.
+> - Add garlic as a new ingredient **at the top** of the ingredients list, and commit the change.
+> - Now make a new commit where you reduce the amount of garlic.
+> - Use `git branch` and `git log` to view the branches and commits.
 >
 >> ## Solution
 >> ~~~
