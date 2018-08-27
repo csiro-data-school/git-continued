@@ -41,23 +41,22 @@ things.
 - The stashes form a stack, so you can stash several batches of modifications.
 
 
-### Exercise: stashes
-
-1. Make a change.
-2. Check status/diff, stash the change, check status/diff again.
-3. Make a separate, unrelated change which doesn't touch the same
-  lines.  Commit this change.
-4. Pop off the stash you saved, check status/diff.
-5. Optional: Do the same but stash twice.  Also check `git stash list`.
-  Can you pop the stashes in the opposite order?
-6. Advanced: What happens if stashes conflict with other changes? Make
-  a change and stash it.  Modify the same line or one right above or
-  below.  Pop the stash back.  Resolve the conflict.  Note there is no
-  extra commit.
-7. Advanced: what does `git graph` show when you have something
-  stashed?
-
----
+> ## Challenge: stashes
+>
+> 1. Make a change.
+> 2. Check status/diff, stash the change, check status/diff again.
+> 3. Make a separate, unrelated change which doesn't touch the same
+>  lines.  Commit this change.
+> 4. Pop off the stash you saved, check status/diff.
+> 5. Optional: Do the same but stash twice.  Also check `git stash list`.
+>   Can you pop the stashes in the opposite order?
+> 6. Advanced: What happens if stashes conflict with other changes? Make
+>   a change and stash it.  Modify the same line or one right above or
+>   below.  Pop the stash back.  Resolve the conflict.  Note there is no
+>   extra commit.
+> 7. Advanced: what does `git graph` show when you have something
+>   stashed?
+{: .challenge}
 
 ## Option 2: Create branches
 
