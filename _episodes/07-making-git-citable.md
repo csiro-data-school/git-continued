@@ -51,6 +51,6 @@ Thankfully, github, in partnership with Zenodo, has a system to provide Digital 
 > - Create a new local repository
 > - Make a few commits, and add a tag.
 > - Create a new remote repository under your username at github.com, and set it as the remote for your local repository.
-> - Use `git push [tag] origin` to add the tag you created locally to the remote
+> - Use `git push origin [tag]` to add the tag you created locally to the remote
 > Follow the guide at [https://guides.github.com/activities/citable-code/](https://guides.github.com/activities/citable-code/) to generate a DOI for that tag.
 {: .challenge}
