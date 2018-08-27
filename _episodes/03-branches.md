@@ -433,9 +433,9 @@ Deleted branch less-salt (was 3db05f9).
 >> ## Solution
 >> This is the result:
 >>
->>![]({{ page.root }}/fig/git-deleted-branches.svg)
-
-Notice all of the history is still there, just the lables (pointers) have been removed.
+>> ![]({{ page.root }}/fig/git-deleted-branches.svg)
+>>
+>> Notice all of the history is still there, just the lables (pointers) have been removed.
 > {: .solution}
 {: .discussion}
 
