@@ -98,34 +98,3 @@ This can also be used to modify the last commit message.
 > This means that we **NEVER** use this command on commits that we have shared with others.
 {: .callout}
 
-
-## Undo unstaged/uncommitted changes
-
-The following approach **permanently deletes** changes that were unstaged/uncommitted!
-
-
-> ## Challenge: Modify without staging
->
-> - Make a silly change to a project, do not stage it or commit it.
-> - Inspect the change with `git status` and `git diff`.
-> - Now undo the change with `git checkout <file>`.
-> - Verify that the change is gone with `git status` and `git diff`.
-{: .challenge}
-
-
-> ## Challenge: Modify after staging
->
-> - Make a reasonable change to a project, stage it.
-> - Make a silly change after you have staged the reasonable change.
-> - Inspect the situation with `git status`, `git diff`, `git diff --staged`, and `git diff HEAD`.
-> - Now undo the silly change with `git checkout <file>`.
-> - Inspect the new situation with `git status`, `git diff`, `git diff --staged`, and 
-> `git diff HEAD`.
-{: .challenge}
-
-> ## Discussion
-> 
-> - What happens if you accidentally remove a tracked file with `git rm`, is it gone forever?
-> - What situations would justify to modify the Git history and possibly remove commits?
-> - Is it OK to modify commits that nobody has seen yet?
-{: .discussion}
