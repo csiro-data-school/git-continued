@@ -28,6 +28,8 @@ keypoints:
 > 
 >> ## Solution
 >> 
+>> Note: There are many ways of adding content to a text file. Adding text directly through an editor (like Sublime) is fine. The solution below uses `>` and `>>` to add contents directly to the textfile from the command line so that the whole solution can be shown.
+>>
 >> ~~~
 >> $ mkdir git-refresher
 >> $ cd git-refresher
@@ -42,9 +44,30 @@ keypoints:
 >> $ git add books.txt
 >> $ git commit -m "added third book"
 >> 
->> #To navigate back two commits
->> $ git checkout HEAD~2
+>> #To navigate back two commits we can check the log (your output will have different details)
+>> $ git log
+>> commit 337af2e62bc52b797b92612a7c35aa9f93b3f4d1 (HEAD -> master) 
+>> author: Alex Whan <alexwhan@gmail.com>
+>> date:   Thu Apr 4 14:33:01 2019 +1100
+>> 
+>>     added third book  
+>> 
+>> commit ef495bf15b38cb272633bc7d29284e6627e81eab 
+>> author: Alex Whan <alexwhan@gmail.com> 
+>> Date:   Thu Apr 4 14:32:37 2019 +1100
+>> 
+>>     added second book  
+>>     
+>> commit 235365a0df7c7d8b9213dd49ab9e998db507cc38 
+>> Author: Alex Whan <alexwhan@gmail.com> 
+>> Date:   Thu Apr 4 14:32:07 2019 +1100
+>> 
+>>     Initial commit - added first book title
+>> 
+>> $ git checkout 235365a0
 >> $ cat books.txt
+>> 
+>> Reminder - you can get back to where you were with `git checkout master`
 >> ~~~
 >> {: .bash}
 > {: .solution}
@@ -64,7 +87,7 @@ keypoints:
 - To send local changes to the remote, use `git push`
 
 > ## Challenge 2 
-> Clone a local copy of the [git-guacamole repo](https://github.com/afdataschool/git-guacamole). 
+> Clone a local copy of the [git-guacamole repo](https://github.com/csiro-data-school/git-guacamole). 
 > Make sure you think about where you should make your local copy.
 >
 > - How many commits have been made in the repository?
@@ -75,7 +98,7 @@ keypoints:
 >> 
 >> Make sure you are not inside a git repository when you do `git clone`
 >> ~~~
->> $ git clone https://github.com/afdataschool/git-guacamole
+>> $ git clone https://github.com/csiro-data-school/git-guacamole
 >> $ cd git-guacamole
 >> $ git log
 >>
