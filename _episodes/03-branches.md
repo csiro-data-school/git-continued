@@ -1,18 +1,67 @@
 ---
-title: "Branching and merging"
-teaching: 20
+title: "Branching and tags"
+teaching: 40
 exercises: 15
 questions:
 - "How can I or my team work on multiple features in parallel?"
-- "How to combine the changes of parallel tracks of work?"
 - "How can I permanently reference a point in history, like a software version?"
 objectives:
-- "Be able to create and merge branches."
+- "Be able to create and navigate between branches."
 - "Know the difference between a branch and a tag."
 keypoints:
 - "A branch is a division unit of work, to be merged with other units of work."
 - "A tag is a pointer to a moment in the history of a project."
 ---
+
+## Navigating a git repository more easily
+
+So far we have gone back in our git history by doing checking out a particular commit (eg `git checkout e03af1`). 
+
+After doing that, you will see a message from git that starts with the ominous warning: `You are in 'detached HEAD' state.`
+
+What exactly does that mean? It has to do with something git uses to make navigating repositories much more straightforward. Git uses pointers, which are labels for particular commits in the history. You can think of them as sticky notes, because they can move around.
+
+There is one pointer that *every* git repository has, called `HEAD`. It simply means that commit that is currently checked out (and therefore reflect the state of the files on your local disk).
+
+If you have a look in `git log` you will see the label `HEAD` at the place in history where you are.
+
+We can use these pointers to make life much easier for ourselves. Instead of referring to a particular commit, we can refer to a commit in relation to a label. For example, `HEAD~1` refers to the commit immediately prior to wherever `HEAD` is pointing. `HEAD~2` refers to the commit two commits previous to `HEAD`.
+
+So if we want to checkout a commit that is two previous to where we are, we can run:
+
+`git checkout HEAD~2`
+
+In addition to `HEAD`, git also uses other pointers called branches (we'll look at these in more detail below). By default, every git repository starts with one branch: `master`. 
+
+While using branches enables lots of capability, in themselves they are just labels that point to a specific commit. 
+
+While `HEAD` can move backward and forward around the repository, the `master` label always points to the newest commit made (while the `master` branch is checked out).
+
+### So what is this detached HEAD all about?
+
+A detached `HEAD` means that the `HEAD` label is pointing directly to a commit, rather than a branch label. That means that git won't let you make any commits from where you are, because commits always have to happen on a branch. So to "re-attach" your `HEAD`, it needs to be pointing at a branch label, not a commit.
+
+> ## Challenge
+>
+> Enter a detached HEAD state in your git repository. See if you can exit the detached state.
+>
+> ### Hint
+> Remember that to be "attached", `HEAD` needs to be pointing at a branch label
+>
+>> ## Solution
+>> We can enter a detached `HEAD` state by
+>> ~~~
+>> $ git checkout HEAD~1
+>> ~~~
+>>
+>> And re-attach it by checking out the master branch (so that the `HEAD` label is pointing at `master` not a commit)
+>> ~~~
+>> $ git checkout master
+>> ~~~
+>> 
+> {: .solution}
+{: .challenge}
+
 
 ## Motivation for branches
 
@@ -46,10 +95,10 @@ version that contains both the changes:
 
 - We see branching points and merging points.
 - Main line development is often called `master`.
-- Other than this convention there is nothing special about `master`, it is just a branch.
+- Other than this convention there is nothing special about `master`, it is just a branch (so just a label that points to a commit).
 - Commits form a directed acyclic graph (we have left out the arrows to avoid confusion about the time arrow).
 
-A group of commits that create a single narrative are called a **branch**.
+A group of commits that create a single narrative are often referred to as a branch, but from git's perspective the branch is really just the label that points to the commit.
 There are different branching strategies, but it is useful to think that a branch
 tells the story of a feature, e.g. "fast sequence extraction" or "Python interface" or "fixing bug in
 matrix inversion algorithm".
@@ -67,7 +116,7 @@ one development line (branch) and this branch is called "master":
 
 
 ~~~
-$ git log --oneline --decorate
+$ git log --oneline 
 
 40a87b4 (HEAD -> master) Revert "Add an onion to the recipe"
 295b424 Add an onion to the recipe
@@ -81,7 +130,7 @@ db9b3a9 Initial commit - added ingredients
 - Commits are states characterized by a 40-character hash (checksum).
 - `git log --oneline` prints abbreviations of these checksums.
 - Branches are labels that point to a commit (pointers). In this case "master".
-- Branch `master` points to commit `f13051c`.
+- Branch `master` points to commit `40a87b4`.
 - `HEAD` is another pointer, it points to where we are right now (currently `master`) 
 
 
@@ -103,7 +152,9 @@ db9b3a9 Initial commit - added ingredients
 
 ### Which branch are we on?
 
-To see where we are (where `HEAD` points to) use `git branch`:
+We can see which branch we're on (where `HEAD` is poinging) with the output from `git status`.
+
+To see all existing branches, as well as which one we're on use `git branch`:
 
 ~~~
 $ git branch
@@ -112,10 +163,10 @@ $ git branch
 ~~~
 {: .shell}
 
-- This command shows where we are, it does not create a branch.
-- There is only one brach, `master`, and we are on `master` (`*` represents the `HEAD`).
+- This command shows where we are, and which other branches exist, it does not create a branch.
+- There is only one branch, `master`, and we are on `master` (`*` represents the `HEAD`).
 
-In the following we will learn how to create branches, how to switch between them, 
+In the following section we will learn how to create branches, how to switch between them, 
 how to merge branches, and how to remove them afterwards.
 
 
@@ -177,13 +228,13 @@ The two branches, `master` and `experiment` have started to diverge.
 >> $ echo "* 1 clove crushed garlic" >> ingredients.txt
 >> $ git add ingredients.txt
 >> $ git commit -m "I wonder if garlic will work"
->> $ vim ingredients.txt
+>> $ vim ingredients.txt #OR YOUR FAVOURITE EDITOR
 >> $ git add ingredients.txt
 >> $ git commit -m "A bit less garlic"
 >> $ git branch
 >> * experiment
 >> master
->> $ git log --oneline --decorate
+>> $ git log --oneline 
 >> 47d0a9d (HEAD -> experiment) A bit less garlic
 >> e1e6f7d I wonder if garlic will work
 >> 40a87b4 (master) Revert "Add an onion to the recipe"
@@ -203,7 +254,7 @@ The two branches, `master` and `experiment` have started to diverge.
 >
 > Try:
 >
-> `git log --all --graph --oneline --decorate`
+> `git log --all --graph --oneline `
 {: .callout}
 
 > ## Challenge
@@ -226,7 +277,7 @@ The two branches, `master` and `experiment` have started to diverge.
 >>   experiment
 >> * less-salt
 >>   master
->> git log --all --graph --oneline --decorate
+>> git log --all --graph --oneline 
 >> * 3db05f9 (HEAD -> less-salt) reduce the salt
 >> | * 47d0a9d (experiment) A bit less garlic
 >> | * e1e6f7d I wonder if garlic will work
@@ -260,7 +311,7 @@ Used in teaching git.
 Now you should have this situation:
 
 ~~~
-$ git log --all --graph --oneline --decorate
+$ git log --all --graph --oneline 
 
 * 29e2be2 (HEAD -> master) added readme
 | * 3db05f9 (less-salt) reduce the salt
@@ -279,234 +330,71 @@ $ git log --all --graph --oneline --decorate
 
 ![]({{ page.root }}/fig/git-branch-3.svg)
 
-And for comparison this is how it looks [on GitHub](https://github.com/bast/recipe/network).
+And for comparison this is how it looks [on GitHub](https://github.com/csiro-data-school/git-guacamole-branched/network).
 
+## Some branch tips
 
-## Merging branches
+### Branch naming
 
-**If you got stuck in the branching exercises**:
+- Name your local branches such that you will recognize them 3 months later.
+- "test2", "foo", "debug", "mybranch" are not good branch names.
+- Give descriptive names to remote branches.
+- For topic branches we recommend to name them "author/topic" (example `sarah/new-integrator`).
+- Then everybody knows who is to be contacted about this branch (e.g. stale branches).
+- Also you can easily find "your" branches:
 
-- **Skip this unless you got stuck**.
 ~~~
-cd ..
-git clone https://github.com/afdataschool/git-guacomole-branched
-cd recipe-branching
-git log --all --graph --oneline --decorate
-~~~
-{: .bash}
-
-It turned out that the experiment with garlic was a good idea.
-Our goal now is to merge `experiment` into `master`.
-
-First we make sure we are on the branch we wish to merge **into**:
-
-~~~~
-$ git branch
-
-  experiment
-  less-salt
-* master
+$ git branch -r | grep sarah
 ~~~
 {: .bash}
 
-Then we merge `experiment` into `master`:
+- Name bugfix branches after the issue/ticket (e.g. `issue-137`).
+- For release branches we recommend e.g. `release/2.x` or `stable-2.x`.
 
-~~~
-git merge experiment
-~~~
 
-![]({{ page.root }}/fig/git-merge-1.svg)
+### Always have only one main development line
 
-We can verify the result in the terminal:
+- Document where it is (there can be many forks, do not leave doubt about where the main line is).
+- Organize branches according to features, not according to groups of people.
+- Good: branches `feature-a`, `feature-b`, `feature-c`.
+- Bad: branches `stockholm`, `san-francisco`, `helsinki`.
+- Reason: `stockholm`, `san-francisco`, and `helsinki` will either diverge
+  (three main development lines) or somebody will spend a heroic effort to keep
+  them synchronized.
 
-~~~
-git log --all --graph --oneline --decorate
 
-*   393dfaf (HEAD -> master) Merge branch 'experiment'
-|\
-| * 47d0a9d (experiment) A bit less garlic
-| * e1e6f7d I wonder if garlic will work
-* | 29e2be2 (origin/master) added readme
-|/
-| * 3db05f9 (less-salt) reduce the salt
-|/
-* 40a87b4 Revert "Add an onion to the recipe"
-* 295b424 Add an onion to the recipe
-* 53f42b7 Added salt to ingredients
-* 1fea6fd Added instructions file
-* 1805665 added txt file extension to ingredients
-* db9b3a9 Initial commit - added ingredients
-```
+### Every commit on the main development line should build/compile
 
-What happens internally when you merge two branches is that git creates a new
-commit, attempts to incorporate changes from both branches and records the
-state of all files in the new commit. While a regular commit has one parent, a
-merge commit has two (or more) parents.
+- Sometimes you want to find a commit in the past that broke some functionality.
+- There is no reason to commit broken or unfinished code to the main development line: for this we have branches.
 
-To view the branches that are merged into the current branch we can use the command:
+## Tags
+
+- A tag is a pointer to a commit but in contrast to a branch it does not move. In the sticky note analogy it's like a sticky note that's been stapled in place.
+- We use tags to record particular states or milestones of a project at a given
+  point in time, like for instance versions (have a look at [semantic versioning](http://semver.org),
+  v1.0.3 is easier to understand and remember than 64441c1934def7d91ff0b66af0795749d5f1954a).
+- There are two basic types of tags: annotated and lightweight.
+- **Use annotated tags** (with the `-a` flag) since they contain the author and can be cryptographically signed using
+  GPG, timestamped, and a message attached.
+
+Let's add an annotated tag to our current state of the guacamole recipe:
 
 ```shell
-$ git branch --merged
-
-  experiment
-* master
+$ git tag -a nobel-2017 -m "recipe I made for the 2017 Nobel banquet"
 ```
 
-We are also happy with the work on the `less-salt` branch. Let us merge that
-one, into `master` as well:
-
-~~~
-$ git branch  # make sure you are on master
-$ git merge less-salt
-~~~
-{: .bash}
-
-![]({{ page.root }}/fig/git-merge-2.svg)
-
-We can verify the result in the terminal:
+As you may have found out already, `git show` is a very versatile command. Try this:
 
 ```shell
-$ git log --all --graph --oneline --decorate
-
-*   95a5f4c (HEAD -> master) Merge branch 'less-salt'
-|\
-| * 3db05f9 (less-salt) reduce the salt
-* |   393dfaf Merge branch 'experiment'
-|\ \
-| * | 47d0a9d (experiment) A bit less garlic
-| * | e1e6f7d I wonder if garlic will work
-| |/
-* | 29e2be2 (origin/master) added readme
-|/
-* 40a87b4 Revert "Add an onion to the recipe"
-* 295b424 Add an onion to the recipe
-* 53f42b7 Added salt to ingredients
-* 1fea6fd Added instructions file
-* 1805665 added txt file extension to ingredients
-* db9b3a9 Initial commit - added ingredients
+$ git show nobel-2017
 ```
 
-Observe how git nicely merged the changed amount of salt and the new ingredient **in the same file
-without us merging it manually**:
+Have a look at the log to see how your tag looks.
 
-~~~
-$ cat ingredients.txt
-
-* 1/2 clove garlic
-* 2 avocados
-* 1 lime
-* 1 tsp salt
-~~~
-{: .bash}
-
-If the same file is changed in both branches, git attempts to incorporate both
-changes into the merged file. If the changes overlap then the user has to
-manually *settle merge conflicts* (we will do that later).
-
-
-## Deleting branches safely
-
-Both feature branches are merged:
-
-~~~
-$ git branch --merged
-
-  experiment
-  less-salt
-* master
-~~~
-{: .bash}
-
-This means we can delete the branches:
-
-~~~
-$ git branch -d experiment less-salt
-
-Deleted branch experiment (was 47d0a9d).
-Deleted branch less-salt (was 3db05f9).
-~~~
-{: .bash}
-
-> ## Discussion
-> Think about what you expect the graph to look like now. What has been removed?
->
->> ## Solution
->> This is the result:
->>
->> ![]({{ page.root }}/fig/git-deleted-branches.svg)
->>
->> Notice all of the history is still there, just the lables (pointers) have been removed.
-> {: .solution}
-{: .discussion}
-
-Compare in the terminal:
-
-~~~
-$ git log --all --graph --oneline --decorate
-
-*   95a5f4c (HEAD -> master) Merge branch 'less-salt'
-|\
-| * 3db05f9 reduce the salt
-* |   393dfaf Merge branch 'experiment'
-|\ \
-| * | 47d0a9d A bit less garlic
-| * | e1e6f7d I wonder if garlic will work
-| |/
-* | 29e2be2 (origin/master) added readme
-|/
-* 40a87b4 Revert "Add an onion to the recipe"
-* 295b424 Add an onion to the recipe
-* 53f42b7 Added salt to ingredients
-* 1fea6fd Added instructions file
-* 1805665 added txt file extension to ingredients
-* db9b3a9 Initial commit - added ingredients
-~~~
-{: .bash}
-
-git will not let you delete a branch which has not been reintegrated unless you
-insist using `git branch -D`. Even then your commits will not be lost but you
-may have a hard time finding them as there is no branch label pointing to them.
-
-
-
-### Exercise: encounter a fast-forward merge
-
-- Create a new branch from `master` and switch to it.
-- Create a couple of commits on the new branch (for instance edit `README.md`):
-
-![]({{ page.root }}/fig/git-pre-ff.svg)
-
-- Now switch to `master`.
-- Merge the new branch to `master`.
-- Examine the result with `git graph`.
-- Have you expected the result? Discuss what you see.
-
----
-
-### Optional advanced exercises
-
-These are advanced exercises. Absolutely no problem to postpone them to
-few months later.
-
-They make use of the following commands:
-
-```shell
-$ git reset --hard <branch/hash>  # rewind current branch to <branch/hash>
-                                  # and throw away all later code changes
-$ git reset --soft <branch/hash>  # rewind current branch to <branch/hash>
-                                  # but keep all later code changes and stage them
-$ git rebase <branch/hash>        # cut current branch off and transplant it on top of <branch/hash>
-$ git reflog                      # show me a log of past hashes I have visited
-$ git checkout -b <branch/hash>   # create a branch pointing to <branch/hash>
-```
-
-- Make a few commits to `master`, then realize you committed to the wrong branch,
-  branch off and rewind the `master` branch back.
-- Delete a branch that is merged, then recreate it.
-- Rebase a branch.
-- Squash commits that are "at the end".
-- Squash a couple of commits except the last one.
-- Delete an unmerged branch, then try to recreate it.
+For more information about tags see for example
+[the Pro Git book](https://git-scm.com/book/en/v2/Git-Basics-Tagging) chapter on the
+subject.
 
 ---
 
@@ -518,9 +406,6 @@ Let us pause for a moment and recapitulate what we have just learned:
 $ git branch               # see where we are
 $ git branch <name>        # create branch <name>
 $ git checkout <name>      # switch to branch <name>
-$ git merge <name>         # merge branch <name> (to current branch)
-$ git branch -d <name>     # delete branch <name>
-$ git branch -D <name>     # delete unmerged branch
 ```
 
 Since the following command combo is so frequent:
@@ -536,67 +421,4 @@ There is a shortcut for it:
 $ git checkout -b <name>   # create branch <name> and switch to it
 ```
 
-### Typical workflows
 
-With this there are two typical workflows:
-
-```shell
-$ git checkout -b new-feature  # create branch, switch to it
-$ git commit                   # work, work, work, ...
-                               # test
-                               # feature is ready
-$ git checkout master          # switch to master
-$ git merge new-feature        # merge work to master
-$ git branch -d new-feature    # remove branch
-```
-
-Sometimes you have a wild idea which does not work.
-Or you want some throw-away branch for debugging:
-
-```shell
-$ git checkout -b wild-idea
-                               # work, work, work, ...
-                               # realize it was a bad idea
-$ git checkout master
-$ git branch -D wild-idea      # it is gone, off to a new idea
-                               # -D because we never merged back
-```
-
-No problem: we worked on a branch, branch is deleted, `master` is clean.
-
----
-
-## Tags
-
-- A tag is a pointer to a commit but in contrast to a branch it does not move.
-- We use tags to record particular states or milestones of a project at a given
-  point in time, like for instance versions (have a look at [semantic versioning](http://semver.org),
-  v1.0.3 is easier to understand and remember than 64441c1934def7d91ff0b66af0795749d5f1954a).
-- There are two basic types of tags: annotated and lightweight.
-- **Use annotated tags** since they contain the author and can be cryptographically signed using
-  GPG, timestamped, and a message attached.
-
-Let's add an annotated tag to our current state of the guacamole recipe:
-
-```shell
-$ git tag -a nobel-2017 -m "recipe I made for the 2017 Nobel banquet"
-```
-
-As you may have found out already, `git show` is a very versatile command. Try this:
-
-```shell
-$ git show nobel-2017
-```
-
-For more information about tags see for example
-[the Pro Git book](https://git-scm.com/book/en/v2/Git-Basics-Tagging) chapter on the
-subject.
-
----
-
-## Questions
-
-- What is a detached `HEAD`?
-- What are orphaned commits?
-- What will happen to orphaned commits?
-- How can you recover orphaned commits?
