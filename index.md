@@ -3,7 +3,7 @@ layout: lesson
 root: .  # Is the only page that don't follow the partner /:path/index.html
 permalink: index.html  # Is the only page that don't follow the partner /:path/index.html
 ---
-This lesson follows on from the [git introduction](https://afdataschool.github.io/git-novice/).
+This lesson follows on from the [git introduction](https://csiro-data-school.github.io/git-intro/).
 We will do a quick refresher, then focus on managing branches, and how to make particular points
 in git history citeable.
 

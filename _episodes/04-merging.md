@@ -17,7 +17,7 @@ keypoints:
 - **Skip this unless you got stuck**.
 ~~~
 cd ..
-git clone https://github.com/afdataschool/git-guacamole-branched
+git clone https://github.com/csiro-data-school/git-guacamole-branched
 cd recipe-branching
 git log --all --graph --oneline 
 ~~~
