@@ -64,7 +64,7 @@ git log --all --graph --oneline
 * 1fea6fd Added instructions file
 * 1805665 added txt file extension to ingredients
 * db9b3a9 Initial commit - added ingredients
-```
+~~~
 
 What happens internally when you merge two branches is that git creates a new
 commit, attempts to incorporate changes from both branches and records the
